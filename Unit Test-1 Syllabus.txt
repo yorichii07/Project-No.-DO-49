@@ -1,0 +1,9 @@
+Unit Test-1 Syllabus
+
+Traditional sdlc V\S Devops
+Devops Culture and mindset
+Clams framework
+Devops Roles & responsibility
+Devops adoption in industry
+Devops lifecyle & value stream
+
