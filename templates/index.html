@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- Dashboard Stats -->
+<div class="bg-indigo-500 text-white p-4 rounded-lg shadow mb-6">
+    <h2 class="text-lg font-semibold">Total Tasks: {{ total_tasks }}</h2>
+</div>
+
+<!-- Add Task -->
+<form action="{{ url_for('add_task') }}" method="POST" class="flex gap-2 mb-6">
+    <input type="text" name="content" 
+           class="flex-1 p-2 rounded border dark:bg-gray-800"
+           placeholder="Add new task..." required>
+    <button class="bg-green-500 px-4 rounded text-white">Add</button>
+</form>
+
+<!-- Task List -->
+<div class="space-y-3">
+    {% for task in tasks %}
+    <div class="flex justify-between items-center p-3 rounded shadow
+                {% if task.completed %}bg-green-200 dark:bg-green-700{% else %}bg-white dark:bg-gray-800{% endif %} 
+                transition duration-300 hover:scale-105">
+
+        <span class="{% if task.completed %}line-through{% endif %}">
+            {{ task.content }}
+        </span>
+
+        <div class="flex gap-3">
+            <a href="{{ url_for('complete_task', id=task.id) }}"
+               class="text-green-600 font-bold">
+               ✔
+            </a>
+
+            <a href="{{ url_for('delete_task', id=task.id) }}"
+               class="text-red-500 font-bold">
+               ✖
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
