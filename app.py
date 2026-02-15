@@ -47,10 +47,14 @@ def load_user(user_id):
 def index():
     tasks = Task.query.filter_by(user_id=current_user.id).all()
     total_tasks = len(tasks)
+    completed_tasks = sum(1 for task in tasks if task.completed)
+    remaining_tasks = total_tasks - completed_tasks
     return render_template(
         'index.html',
         tasks=tasks,
-        total_tasks=total_tasks
+        total_tasks=total_tasks,
+        completed_tasks=completed_tasks,
+        remaining_tasks=remaining_tasks
     )
 
 
@@ -58,7 +62,9 @@ def index():
 @app.route('/add', methods=['POST'])
 @login_required
 def add_task():
-    content = request.form.get('content')
+    content = (request.form.get('content') or '').strip()
+    if not content:
+        return redirect(url_for('index'))
     new_task = Task(content=content, user_id=current_user.id)
     db.session.add(new_task)
     db.session.commit()
@@ -90,8 +96,12 @@ def complete_task(id):
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        username = request.form.get('username')
+        username = (request.form.get('username') or '').strip()
         password = request.form.get('password')
+
+        if User.query.filter_by(username=username).first():
+            flash("Username already exists. Please choose another one.")
+            return redirect(url_for('register'))
 
         hashed_password = generate_password_hash(password)
 

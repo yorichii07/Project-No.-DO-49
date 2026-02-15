@@ -1,26 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Authentication</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Welcome | Task Atlas{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body class="bg-gradient-to-r from-indigo-500 to-purple-600 min-h-screen flex items-center justify-center">
+<body>
+<div class="auth-shell">
+    <div class="auth-card">
+        <h1>Task Atlas</h1>
+        <p>Turn the noise into a clear, daily rhythm.</p>
 
-<div class="bg-white p-8 rounded-xl shadow-lg w-96">
-    <h1 class="text-2xl font-bold text-center mb-6">🚀 Task Manager</h1>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            {% for msg in messages %}
+              <div class="flash">{{ msg }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
 
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        {% for msg in messages %}
-          <div class="bg-red-100 text-red-600 p-2 mb-3 rounded text-sm">
-              {{ msg }}
-          </div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
-
-    {% block content %}{% endblock %}
+        {% block content %}{% endblock %}
+    </div>
 </div>
-
 </body>
 </html>

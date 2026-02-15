@@ -1,23 +1,22 @@
 {% extends 'auth_base.html' %}
 {% block content %}
+<form method="POST" class="auth-form">
+    <div>
+        <label for="username">Username</label>
+        <input id="username" type="text" name="username" class="input" placeholder="Pick a handle" required>
+    </div>
 
-<form method="POST" class="space-y-4">
-    <input type="text" name="username" placeholder="Username"
-           class="w-full border p-2 rounded" required>
+    <div>
+        <label for="password">Password</label>
+        <input id="password" type="password" name="password" class="input" placeholder="Create a secret" required>
+    </div>
 
-    <input type="password" name="password" placeholder="Password"
-           class="w-full border p-2 rounded" required>
-
-    <button class="w-full bg-green-600 text-white p-2 rounded hover:bg-green-700">
-        Register
-    </button>
+    <button class="btn btn-primary" type="submit">Create account</button>
 </form>
 
-<p class="text-center mt-4 text-sm">
+<div class="auth-footer">
     Already have an account?
-    <a href="{{ url_for('login') }}" class="text-green-600 font-semibold">
-        Login
-    </a>
-</p>
+    <a href="{{ url_for('login') }}">Log in</a>
+</div>
 
 {% endblock %}

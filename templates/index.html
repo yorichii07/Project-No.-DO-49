@@ -1,43 +1,58 @@
 {% extends 'base.html' %}
 {% block content %}
+<section class="hero">
+    <div class="hero-card">
+        <h1>Make today feel intentional.</h1>
+        <p>Capture what matters, track your momentum, and keep the day clean and focused.</p>
 
-<!-- Dashboard Stats -->
-<div class="bg-indigo-500 text-white p-4 rounded-lg shadow mb-6">
-    <h2 class="text-lg font-semibold">Total Tasks: {{ total_tasks }}</h2>
-</div>
-
-<!-- Add Task -->
-<form action="{{ url_for('add_task') }}" method="POST" class="flex gap-2 mb-6">
-    <input type="text" name="content" 
-           class="flex-1 p-2 rounded border dark:bg-gray-800"
-           placeholder="Add new task..." required>
-    <button class="bg-green-500 px-4 rounded text-white">Add</button>
-</form>
-
-<!-- Task List -->
-<div class="space-y-3">
-    {% for task in tasks %}
-    <div class="flex justify-between items-center p-3 rounded shadow
-                {% if task.completed %}bg-green-200 dark:bg-green-700{% else %}bg-white dark:bg-gray-800{% endif %} 
-                transition duration-300 hover:scale-105">
-
-        <span class="{% if task.completed %}line-through{% endif %}">
-            {{ task.content }}
-        </span>
-
-        <div class="flex gap-3">
-            <a href="{{ url_for('complete_task', id=task.id) }}"
-               class="text-green-600 font-bold">
-               ✔
-            </a>
-
-            <a href="{{ url_for('delete_task', id=task.id) }}"
-               class="text-red-500 font-bold">
-               ✖
-            </a>
+        <div class="stats-grid">
+            <div class="stat-tile">
+                <div class="stat-label">Total tasks</div>
+                <div class="stat-value">{{ total_tasks }}</div>
+            </div>
+            <div class="stat-tile">
+                <div class="stat-label">Completed</div>
+                <div class="stat-value">{{ completed_tasks }}</div>
+            </div>
+            <div class="stat-tile">
+                <div class="stat-label">In progress</div>
+                <div class="stat-value">{{ remaining_tasks }}</div>
+            </div>
         </div>
     </div>
-    {% endfor %}
-</div>
+
+    <div class="hero-card">
+        <h1>Your rhythm</h1>
+        <p>Small steps add up. Add a task, keep it tight, and clear the list before you log off.</p>
+    </div>
+</section>
+
+<section class="task-panel">
+    <form action="{{ url_for('add_task') }}" method="POST" class="task-form">
+        <input type="text" name="content" class="input" placeholder="Add a new task" required>
+        <button class="btn btn-primary" type="submit">Add task</button>
+    </form>
+
+    <div class="task-list">
+        {% for task in tasks %}
+        <div class="task-item {% if task.completed %}completed{% endif %}">
+            <div class="task-text {% if task.completed %}completed{% endif %}">
+                {{ task.content }}
+            </div>
+
+            <div class="task-actions">
+                <a href="{{ url_for('complete_task', id=task.id) }}" class="action-link complete" title="Toggle complete">
+                    OK
+                </a>
+                <a href="{{ url_for('delete_task', id=task.id) }}" class="action-link delete" title="Delete task">
+                    X
+                </a>
+            </div>
+        </div>
+        {% else %}
+        <div class="empty-state">No tasks yet. Add your first focus item above.</div>
+        {% endfor %}
+    </div>
+</section>
 
 {% endblock %}
