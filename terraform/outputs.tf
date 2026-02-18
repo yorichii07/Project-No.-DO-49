@@ -146,4 +146,5 @@ output "usage_examples" {
     "Connect_to_DB"      = "psql -h ${aws_db_instance.main.address} -U ${var.db_username} -d ${var.db_name}",
     "Get_All_Outputs"    = "terraform output -json"
   }
+  sensitive = true
 }

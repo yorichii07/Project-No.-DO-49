@@ -1,15 +1,7 @@
 # ============================================================================
 # VPC and Networking Resources
 # ============================================================================
-# This file contains all networking components:
-# - VPC and subnets (public and private)
-# - Internet Gateway and NAT Gateways
-# - Route tables and routing
-# - Security Groups for ALB, ECS tasks, and RDS
-
-# ============================================================================
-# VPC SETUP
-# ============================================================================
+# VPC, subnets, Internet Gateway, NAT Gateways, route tables, security groups
 
 # VPC
 resource "aws_vpc" "main" {
@@ -22,19 +14,13 @@ resource "aws_vpc" "main" {
   })
 }
 
-# ============================================================================
-# INTERNET GATEWAY
-# ============================================================================
-
+# Internet Gateway
 resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
 
   tags = merge(local.common_tags, {
     Name = "${local.app_name}-igw"
-  ============================================================================
-# SUBNETS: PUBLIC (for ALB)
-# ============================================================================
-
+  })
 }
 
 # Public Subnets
@@ -47,10 +33,7 @@ resource "aws_subnet" "public" {
 
   tags = merge(local.common_tags, {
     Name = "${local.app_name}-public-subnet-${count.index + 1}"
-  ============================================================================
-# SUBNETS: PRIVATE (for ECS tasks and RDS)
-# ============================================================================
-
+  })
 }
 
 # Private Subnets
@@ -59,11 +42,7 @@ resource "aws_subnet" "private" {
   vpc_id             = aws_vpc.main.id
   cidr_block         = "10.0.${count.index + 11}.0/24"
   availability_zone  = data.aws_availability_zones.available.names[count.index]
-============================================================================
-# NAT GATEWAYS (for private subnet internet access)
-# ============================================================================
 
-# 
   tags = merge(local.common_tags, {
     Name = "${local.app_name}-private-subnet-${count.index + 1}"
   })
@@ -87,11 +66,7 @@ resource "aws_nat_gateway" "main" {
   allocation_id = aws_eip.nat[count.index].id
   subnet_id     = aws_subnet.public[count.index].id
 
-  ============================================================================
-# ROUTE TABLES
-# ============================================================================
-
-# Public Route Table (routes to Internet Gateway).common_tags, {
+  tags = merge(local.common_tags, {
     Name = "${local.app_name}-nat-${count.index + 1}"
   })
 
@@ -108,7 +83,7 @@ resource "aws_route_table" "public" {
   }
 
   tags = merge(local.common_tags, {
-    Name = "${local.ap (routes to NAT Gateway)p_name}-public-rt"
+    Name = "${local.app_name}-public-rt"
   })
 }
 
@@ -133,11 +108,20 @@ resource "aws_route_table" "private" {
     Name = "${local.app_name}-private-rt-${count.index + 1}"
   })
 }
-============================================================================
-# SECURITY GROUPS
-# ============================================================================
 
-# ALB Security Group - allows inbound HTTP/HTTPS from internet
+# Private Route Table Associations
+resource "aws_route_table_association" "private" {
+  count          = 2
+  subnet_id      = aws_subnet.private[count.index].id
+  route_table_id = aws_route_table.private[count.index].id
+}
+
+# Get available AZs
+data "aws_availability_zones" "available" {
+  state = "available"
+}
+
+# ALB Security Group
 resource "aws_security_group" "alb" {
   name        = "${local.app_name}-alb-sg"
   description = "Security group for ALB"
@@ -172,7 +156,7 @@ resource "aws_security_group" "alb" {
   })
 }
 
-# ECS Tasks Security Group - allows traffic from ALB
+# ECS Tasks Security Group
 resource "aws_security_group" "ecs_tasks" {
   name        = "${local.app_name}-ecs-tasks-sg"
   description = "Security group for ECS tasks"
@@ -197,7 +181,7 @@ resource "aws_security_group" "ecs_tasks" {
   })
 }
 
-# RDS Security Group - allows PostgreSQL traffic from ECS tasks
+# RDS Security Group
 resource "aws_security_group" "rds" {
   name        = "${local.app_name}-rds-sg"
   description = "Security group for RDS"
@@ -220,21 +204,4 @@ resource "aws_security_group" "rds" {
   tags = merge(local.common_tags, {
     Name = "${local.app_name}-rds-sg"
   })
-}
-
-# ============================================================================
-# DATA SOURCES
-# ============================================================================
-
-# Get available AZs for the current region
-# Private Route Table Associations
-resource "aws_route_table_association" "private" {
-  count          = 2
-  subnet_id      = aws_subnet.private[count.index].id
-  route_table_id = aws_route_table.private[count.index].id
-}
-
-# Data source for availability zones
-data "aws_availability_zones" "available" {
-  state = "available"
 }

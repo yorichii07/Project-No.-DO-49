@@ -181,7 +181,7 @@ resource "aws_db_instance" "main" {
 
   deletion_protection = var.environment == "prod" ? true : false
 
-  enable_cloudwatch_logs_exports = ["postgresql"]
+  enabled_cloudwatch_logs_exports = ["postgresql"]
   monitoring_interval            = 60
   monitoring_role_arn           = aws_iam_role.rds_monitoring.arn
 
@@ -216,27 +216,4 @@ resource "aws_iam_role_policy_attachment" "rds_monitoring_policy" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonRDSEnhancedMonitoringRole"
 }
 
-# ============================================================================
-# OUTPUTS
-# ============================================================================
 
-output "ecr_repository_url" {
-  description = "ECR repository URL"
-  value       = aws_ecr_repository.app.repository_url
-}
-
-output "db_endpoint" {
-  description = "RDS database endpoint"
-  value       = aws_db_instance.main.endpoint
-  sensitive   = true
-}
-
-output "db_address" {
-  description = "RDS database address"
-  value       = aws_db_instance.main.address
-}
-
-output "db_port" {
-  description = "RDS database port"
-  value       = aws_db_instance.main.port
-}

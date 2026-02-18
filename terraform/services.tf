@@ -73,23 +73,8 @@ resource "aws_lb_listener" "http" {
   protocol          = "HTTP"
 
   default_action {
-    type = var.enable_https ? "redirect" : "forward"
-
-    dynamic "redirect" {
-      for_each = var.enable_https ? [1] : []
-      content {
-        port        = "443"
-        protocol    = "HTTPS"
-        status_code = "HTTP_301"
-      }
-    }
-
-    dynamic "forward" {
-      for_each = var.enable_https ? [] : [1]
-      content {
-        target_group_arn = aws_lb_target_group.app.arn
-      }
-    }
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.app.arn
   }
 }
 
@@ -288,41 +273,4 @@ resource "aws_appautoscaling_policy" "ecs_policy_memory" {
   }
 }
 
-# ============================================================================
-# OUTPUTS
-# ============================================================================
 
-output "alb_dns_name" {
-  description = "DNS name of the load balancer"
-  value       = aws_lb.main.dns_name
-}
-
-output "alb_arn" {
-  description = "ARN of the load balancer"
-  value       = aws_lb.main.arn
-}
-
-output "target_group_arn" {
-  description = "ARN of the target group"
-  value       = aws_lb_target_group.app.arn
-}
-
-output "ecs_cluster_name" {
-  description = "ECS cluster name"
-  value       = aws_ecs_cluster.main.name
-}
-
-output "ecs_service_name" {
-  description = "ECS service name"
-  value       = aws_ecs_service.app.name
-}
-
-output "task_definition_arn" {
-  description = "Task definition ARN"
-  value       = aws_ecs_task_definition.app.arn
-}
-
-output "cloudwatch_log_group" {
-  description = "CloudWatch log group name"
-  value       = aws_cloudwatch_log_group.app.name
-}
