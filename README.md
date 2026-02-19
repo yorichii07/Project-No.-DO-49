@@ -83,3 +83,11 @@ Add screenshots here when ready:
 ## Notes
 - The SQLite database file is created automatically on first run.
 - This app uses Flask's debug server for development only.
+
+## CI/CD Pipeline Added
+
+This project now includes a complete CI/CD pipeline using:
+- Jenkins
+- Docker
+- Pytest
+- Flask
