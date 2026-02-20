@@ -1,10 +1,11 @@
-# Group 10D12 DO-48: Hospitality Management Application
+# Group 11 D12 DO-49: Atlas Task
+
 ## Division
 D12
 ## Group
-Group 10D12
+Group 11 D12
 ## Project Number
-DO-48
+DO-49
 ## Problem Statement
 CI/CD for Vue.js Technology App
 
