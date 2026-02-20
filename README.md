@@ -1,3 +1,18 @@
+# Group 10D12 DO-48: Hospitality Management Application
+## Division
+D12
+## Group
+Group 10D12
+## Project Number
+DO-48
+## Problem Statement
+CI/CD for Vue.js Technology App
+
+## Description	
+Design and implement a professional CI/CD pipeline for a a Vue.js Technology application using GitHub Actions or Jenkins. The workflow automates the entire software delivery lifecycle, including
+automated unit testing upon every commit and containerized artifact creation upon merging to the production branch. This setup ensures high code quality and rapid, reliable deployment cycles for the enterprise environment.
+Tools	Git, Docker, Jenkins/Actions, K8s
+
 # Task Atlas
 
 A clean, focused task manager built with Flask, SQLAlchemy, and Flask-Login.
@@ -91,3 +106,12 @@ This project now includes a complete CI/CD pipeline using:
 - Docker
 - Pytest
 - Flask
+
+## Group Members
+ - Suzal Devani
+ - Aryan Gangrade
+ - Ayushi Jat
+ - Naina Sahu
+ - Aditi Singh
+ - Preeti Prajapat
+
