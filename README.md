@@ -7,10 +7,10 @@ Group 11 D12
 ## Project Number
 DO-49
 ## Problem Statement
-CI/CD for Vue.js Technology App
+CI/CD for python flask Task Atlas App
 
 ## Description	
-Design and implement a professional CI/CD pipeline for a a Vue.js Technology application using GitHub Actions or Jenkins. The workflow automates the entire software delivery lifecycle, including
+Design and implement a professional CI/CD pipeline for a a python flask Technology application using GitHub Actions or Jenkins. The workflow automates the entire software delivery lifecycle, including
 automated unit testing upon every commit and containerized artifact creation upon merging to the production branch. This setup ensures high code quality and rapid, reliable deployment cycles for the enterprise environment.
 Tools	Git, Docker, Jenkins/Actions, K8s
 
@@ -103,7 +103,7 @@ Add screenshots here when ready:
 ## CI/CD Pipeline Added
 
 This project now includes a complete CI/CD pipeline using:
-- Jenkins
+- Jenkins/Actions
 - Docker
 - Pytest
 - Flask
